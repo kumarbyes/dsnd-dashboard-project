@@ -1,5 +1,5 @@
 # Import any dependencies needed to execute sql queries
-from sql_execution import QueryMixin
+from .sql_execution import QueryMixin
 
 # Define a class called QueryBase
 # Use inheritance to add methods
@@ -31,18 +31,13 @@ class QueryBase(QueryMixin):
         # Use f-string formatting to set the name
         # of id columns used for joining
         # order by the event_date column
-        query_string = f"""
-                SELECT
-                event_date,
-                SUM(positive_events),
-                SUM(negative_events)
-                FROM employee_events
-                JOIN {self.name} ON employee_events.{self.name}_id = {self.name}.{self.name}_id
-                WHERE employee_events.{self.name}_id = {id}
-                GROUP BY event_date
-                ORDER BY event_date;
-        """
-        return QueryMixin.pandas_query(query_string)
+        query_string = f"SELECT event_date,SUM(positive_events),SUM(negative_events)\
+                        FROM employee_events\
+                        JOIN {self.name} ON employee_events.{self.name}_id = {self.name}.{self.name}_id\
+                        WHERE employee_events.{self.name}_id = {id}\
+                        GROUP BY event_date\
+                        ORDER BY event_date"
+        return super().pandas_query(query_string)
             
     
 
@@ -57,13 +52,9 @@ class QueryBase(QueryMixin):
         # with f-string formatting
         # so the query returns the notes
         # for the table name in the `name` class attribute
-        query_string = f"""
-                SELECT
-                note_date,
-                note
-                FROM notes
-                JOIN {self.name} ON {self.name}.{self.name}_id = notes.{self.name}_id
-                WHERE notes.{self.name}_id = {id};
-        """
-        return QueryMixin.pandas_query(query_string)
+        query_string = f"SELECT note_date,note \
+                        FROM notes \
+                        JOIN {self.name} ON {self.name}.{self.name}_id = notes.{self.name}_id \
+                        WHERE notes.{self.name}_id = {id}"
+        return super().pandas_query(query_string)
 

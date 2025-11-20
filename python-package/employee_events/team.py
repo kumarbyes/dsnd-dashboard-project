@@ -1,12 +1,12 @@
 # Import the QueryBase class
-from query_base import QueryBase
+from .query_base import QueryBase
 
 # Import dependencies for sql execution
-from sql_execution import QueryMixin
+from .sql_execution import QueryMixin
 
 # Create a subclass of QueryBase
 # called  `Team`
-class Team(QueryBase):
+class Team(QueryBase,QueryMixin):
 
     # Set the class attribute `name`
     # to the string "team"
@@ -17,7 +17,7 @@ class Team(QueryBase):
     # that receives no arguments
     # This method should return
     # a list of tuples from an sql execution
-    def name(self):
+    def names(self):
         
         # Query 5
         # Write an SQL query that selects
@@ -25,7 +25,7 @@ class Team(QueryBase):
         # from the team table for all teams
         # in the database
         query_string = f"SELECT * FROM {self.name}"
-        return QueryMixin.query(query_string)
+        return super().query(query_string)
     
 
     # Define a `username` method
@@ -41,9 +41,9 @@ class Team(QueryBase):
         # to only return the team name related to
         # the ID argument
         query_string = f"SELECT team_name \
-                FROM {self.name}\
-                WHERE {self.name}_id = {id}"
-        return QueryMixin.query(query_string)
+                        FROM {self.name}\
+                        WHERE {self.name}_id = {id}"
+        return super().query(query_string)
 
 
     # Below is method with an SQL query
@@ -56,7 +56,7 @@ class Team(QueryBase):
     #### YOUR CODE HERE
     def model_data(self, id):
 
-        return QueryMixin.pandas_query(f"""
+        return super().pandas_query(f"""
             SELECT positive_events, negative_events FROM (
                     SELECT employee_id
                          , SUM(positive_events) positive_events

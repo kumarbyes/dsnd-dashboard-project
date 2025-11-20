@@ -19,7 +19,7 @@ class QueryMixin:
     def pandas_query(self,query_as_string):
         # Read sqlite query results into a pandas DataFrame
         con = connect(db_path)
-        df = pd.read_sql_query(query, con)
+        df = pd.read_sql_query(query_as_string, con)
         con.close()
         return df
 

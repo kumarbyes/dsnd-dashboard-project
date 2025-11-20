@@ -1,13 +1,13 @@
 # Import the QueryBase class
-from query_base import QueryBase
+from .query_base import QueryBase
 
 # Import dependencies needed for sql execution
 # from the `sql_execution` module
-from sql_execution import QueryMixin
+from .sql_execution import QueryMixin
 
 # Define a subclass of QueryBase
 # called Employee
-class Employee(QueryBase):
+class Employee(QueryBase,QueryMixin):
 
     # Set the class attribute `name`
     # to the string "employee"
@@ -28,7 +28,7 @@ class Employee(QueryBase):
         # This query should return the data
         # for all employees in the database
         query_string = f"SELECT * FROM {self.name}"
-        return QueryMixin.query(query_string)
+        return super().query(query_string)
     
 
     # Define a method called `username`
@@ -46,7 +46,7 @@ class Employee(QueryBase):
         query_string = f"SELECT first_name,last_name \
                 FROM {self.name}\
                 WHERE {self.name}_id = {id}"
-        return QueryMixin.query(query_string)
+        return super().query(query_string)
 
 
     # Below is method with an SQL query
@@ -59,7 +59,7 @@ class Employee(QueryBase):
     #### YOUR CODE HERE
     def model_data(self, id):
 
-        return QueryMixin.pandas_query(f"""
+        return super().pandas_query(f"""
                     SELECT SUM(positive_events) positive_events
                          , SUM(negative_events) negative_events
                     FROM {self.name}
