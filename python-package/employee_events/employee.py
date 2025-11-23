@@ -5,39 +5,37 @@ from .query_base import QueryBase
 # from the `sql_execution` module
 from .sql_execution import QueryMixin
 
+
 # Define a subclass of QueryBase
 # called Employee
-class Employee(QueryBase,QueryMixin):
+class Employee(QueryBase, QueryMixin):
 
     # Set the class attribute `name`
     # to the string "employee"
     name = "employee"
-
 
     # Define a method called `names`
     # that receives no arguments
     # This method should return a list of tuples
     # from an sql execution
     def names(self):
-        
         # Query 3
         # Write an SQL query
-        # that selects two columns 
+        # that selects two columns
         # 1. The employee's full name
         # 2. The employee's id
         # This query should return the data
         # for all employees in the database
-        query_string = f"SELECT CONCAT(first_name,' ', last_name) as full_name, {self.name}_id \
+        query_string = f"SELECT CONCAT(first_name,' ', last_name) \
+                        as full_name,{self.name}_id \
                         FROM {self.name}"
         return super().query(query_string)
-    
 
     # Define a method called `username`
     # that receives an `id` argument
     # This method should return a list of tuples
     # from an sql execution
-    def username(self,id):
-        
+    def username(self, id):
         if id is None:
             query_string = f"SELECT first_name,last_name \
                             FROM {self.name}\
@@ -54,7 +52,6 @@ class Employee(QueryBase,QueryMixin):
                 WHERE {self.name}_id = {id}"
         return super().query(query_string)
 
-
     # Below is method with an SQL query
     # This SQL query generates the data needed for
     # the machine learning model.
@@ -62,7 +59,6 @@ class Employee(QueryBase,QueryMixin):
     # so when it is called, a pandas dataframe
     # is returns containing the execution of
     # the sql query
-    #### YOUR CODE HERE
     def model_data(self, id):
 
         return super().pandas_query(f"""

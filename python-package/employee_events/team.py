@@ -4,21 +4,20 @@ from .query_base import QueryBase
 # Import dependencies for sql execution
 from .sql_execution import QueryMixin
 
+
 # Create a subclass of QueryBase
 # called  `Team`
-class Team(QueryBase,QueryMixin):
+class Team(QueryBase, QueryMixin):
 
     # Set the class attribute `name`
     # to the string "team"
     name = 'team'
-
 
     # Define a `names` method
     # that receives no arguments
     # This method should return
     # a list of tuples from an sql execution
     def names(self):
-        
         # Query 5
         # Write an SQL query that selects
         # the team_name and team_id columns
@@ -27,14 +26,12 @@ class Team(QueryBase,QueryMixin):
         query_string = f"SELECT {self.name}_name, {self.name}_id \
                         FROM {self.name}"
         return super().query(query_string)
-    
 
     # Define a `username` method
     # that receives an ID argument
     # This method should return
     # a list of tuples from an sql execution
-    def username(self,id):
-        
+    def username(self, id):
         if id is None:
             query_string = f"SELECT team_name \
                             FROM {self.name}\
@@ -51,7 +48,6 @@ class Team(QueryBase,QueryMixin):
                         WHERE {self.name}_id = {id}"
         return super().query(query_string)
 
-
     # Below is method with an SQL query
     # This SQL query generates the data needed for
     # the machine learning model.
@@ -59,7 +55,6 @@ class Team(QueryBase,QueryMixin):
     # so when it is called, a pandas dataframe
     # is returns containing the execution of
     # the sql query
-    #### YOUR CODE HERE
     def model_data(self, id):
 
         return super().pandas_query(f"""

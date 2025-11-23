@@ -6,14 +6,15 @@ from pathlib import Path
 # for the root of this project
 project_root = Path(__file__).parents[1]
 
+
 # apply the pytest fixture decorator
 # to a `db_path` function
 @pytest.fixture
 def db_path():
-    
     # Using the `project_root` variable
     # return a pathlib object for the `employee_events.db` file
-    return project_root / 'python-package' / 'employee_events' / 'employee_events.db' 
+    return project_root / 'python-package' / 'employee_events' / 'employee_events.db'  # noqa: E501
+
 
 # Define a function called
 # `test_db_exists`
@@ -22,21 +23,23 @@ def db_path():
 # the creates the "fixture" for
 # the database's filepath
 def test_db_exists(db_path):
-    
     # using the pathlib `.is_file` method
     # assert that the sqlite database file exists
     # at the location passed to the test_db_exists function
-    assert Path.is_file(db_path) == True, f"File does not exists at {db_path}"
+    assert Path.is_file(db_path) == True, f"File does not exists at {db_path}"  # noqa: E712, E501
+
 
 @pytest.fixture
 def db_conn(db_path):
     from sqlite3 import connect
     return connect(db_path)
 
+
 @pytest.fixture
 def table_names(db_conn):
-    name_tuples = db_conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
+    name_tuples = db_conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()  # noqa: E501
     return [x[0] for x in name_tuples]
+
 
 # Define a test function called
 # `test_employee_table_exists`
@@ -46,7 +49,8 @@ def test_employee_table_exists(table_names):
 
     # Assert that the string 'employee'
     # is in the table_names list
-    assert 'employee' in table_names, "Table employee is not present in the employee_events.db"
+    assert 'employee' in table_names, "Table employee is not present in the employee_events.db"  # noqa: E501
+
 
 # Define a test function called
 # `test_team_table_exists`
@@ -56,7 +60,8 @@ def test_team_table_exists(table_names):
 
     # Assert that the string 'team'
     # is in the table_names list
-    assert 'team' in table_names, "Table team is not present in the employee_events.db"
+    assert 'team' in table_names, "Table team is not present in the employee_events.db"  # noqa: E501
+
 
 # Define a test function called
 # `test_employee_events_table_exists`
@@ -66,4 +71,4 @@ def test_employee_events_table_exists(table_names):
 
     # Assert that the string 'employee_events'
     # is in the table_names list
-    assert 'employee_events' in table_names, "Table employee_events is not present in the employee_events.db"
+    assert 'employee_events' in table_names, "Table employee_events is not present in the employee_events.db"  # noqa: E501
