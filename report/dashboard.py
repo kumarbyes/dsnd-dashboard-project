@@ -46,12 +46,7 @@ class ReportDropdown(Dropdown):
         # call the employee_events method
         # that returns the user-type's
         # names and ids
-        if model.name == "employee":
-            print("hi")
-            return model.names()
-        elif model.name == "team":
-            print("bye")
-            return model.names()
+        return model.names()
 
 # Create a subclass of base_components/BaseComponent
 # called `Header`
@@ -66,6 +61,18 @@ class Header(BaseComponent):
         # return a fasthtml H1 objects
         # containing the model's name attribute
         return H1(model.name)
+
+class Subheader(BaseComponent):
+
+    # Overwrite the `build_component` method
+    # Ensure the method has the same parameters
+    # as the parent class
+    def build_component(self, entity_id, model):
+        
+        # Using the model argument for this method
+        # return a fasthtml H2 objects
+        # containing the model's name attribute
+        return H2('Notes Table')
 
 
 # Create a subclass of base_components/MatplotlibViz
@@ -108,7 +115,7 @@ class LineChart(MatplotlibViz):
         # Initialize a pandas subplot
         # and assign the figure and axis
         # to variables
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots() #figsize=(10, 6),constrained_layout=True
         
         # call the .plot method for the
         # cumulative counts dataframe
@@ -124,9 +131,12 @@ class LineChart(MatplotlibViz):
         self.set_axis_styling(ax,bordercolor='black', fontcolor='black')
         
         # Set title and labels for x and y axis
-        ax.set_title(f"Cumuluative positive and negative events for {model.name} with ID = {entity_id}")
+        ax.set_title(f"Cumulative positive and negative events for {model.name} with ID = {entity_id}")
         ax.set_xlabel("Event Date")
-        ax.set_ylabel("Cumulative Count")
+        ax.set_ylabel("Cumulative Count of events")
+        ax.tick_params(axis='x', labelrotation=20)
+
+        plt.tight_layout()
 
 
 # Create a subclass of base_components/MatplotlibViz
@@ -170,17 +180,21 @@ class BarChart(MatplotlibViz):
             pred = second_column[0]
         
         # Initialize a matplotlib subplot
-        fig,ax = plt.subplots()
+        fig,ax = plt.subplots() #figsize=(10, 6),constrained_layout=True
         
         # Run the following code unchanged
         ax.barh([''], [pred])
         ax.set_xlim(0, 1)
-        ax.set_title('Predicted Recruitment Risk', fontsize=20)
+        ax.set_title('Predicted Recruitment Risk')
+        ax.set_xlabel("Probability of recruitment")
+        ax.set_ylabel(f"{model.name} with ID = {entity_id}")
         
         # pass the axis variable
         # to the `.set_axis_styling`
         # method
         self.set_axis_styling(ax,bordercolor='black', fontcolor='black')
+
+        plt.tight_layout()
  
 # Create a subclass of combined_components/CombinedComponent
 # called Visualizations       
@@ -236,14 +250,13 @@ class Report(CombinedComponent):
     # containing initialized instances 
     # of the header, dashboard filters,
     # data visualizations, and notes table
-    children = [ Header(), DashboardFilters() , Visualizations(), NotesTable() ]
+    children = [ Header(), DashboardFilters() , Visualizations(), Subheader(), NotesTable() ]
 
 # Initialize a fasthtml app 
 app, route = fast_app()
 
 # Initialize the `Report` class
 report = Report()
-
 
 # Create a route for a get request
 # Set the route's path to the root
@@ -293,7 +306,7 @@ def get(id:str=None):
 @app.get('/update_dropdown{r}')
 def update_dropdown(r):
     dropdown = DashboardFilters.children[1]
-    print('PARAM', r.query_params['profile_type'])
+    #print('PARAM', r.query_params['profile_type'])
     if r.query_params['profile_type'] == 'Team':
         return dropdown(None, Team())
     elif r.query_params['profile_type'] == 'Employee':
