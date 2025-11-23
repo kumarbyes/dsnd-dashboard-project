@@ -31,7 +31,7 @@ class QueryBase(QueryMixin):
         # Use f-string formatting to set the name
         # of id columns used for joining
         # order by the event_date column
-        query_string = f"SELECT event_date,SUM(positive_events),SUM(negative_events)\
+        query_string = f"SELECT event_date,SUM(positive_events) as positive_events,SUM(negative_events) as negative_events\
                         FROM employee_events\
                         JOIN {self.name} ON employee_events.{self.name}_id = {self.name}.{self.name}_id\
                         WHERE employee_events.{self.name}_id = {id}\

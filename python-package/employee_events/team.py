@@ -24,7 +24,8 @@ class Team(QueryBase,QueryMixin):
         # the team_name and team_id columns
         # from the team table for all teams
         # in the database
-        query_string = f"SELECT * FROM {self.name}"
+        query_string = f"SELECT {self.name}_name, {self.name}_id \
+                        FROM {self.name}"
         return super().query(query_string)
     
 
@@ -33,7 +34,12 @@ class Team(QueryBase,QueryMixin):
     # This method should return
     # a list of tuples from an sql execution
     def username(self,id):
-
+        
+        if id is None:
+            query_string = f"SELECT team_name \
+                            FROM {self.name}\
+                            WHERE {self.name}_id = 1"
+            return super().query(query_string)
         # Query 6
         # Write an SQL query
         # that selects the team_name column

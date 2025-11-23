@@ -15,7 +15,6 @@ class Dropdown(BaseComponent):
             option = Option(text, value=value, selected="selected" if str(value) == entity_id else "")
             options.append(option)
 
-
         dropdown_settings = {
             'name': self.name
             }

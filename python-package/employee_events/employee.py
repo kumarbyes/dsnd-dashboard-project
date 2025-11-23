@@ -27,7 +27,8 @@ class Employee(QueryBase,QueryMixin):
         # 2. The employee's id
         # This query should return the data
         # for all employees in the database
-        query_string = f"SELECT * FROM {self.name}"
+        query_string = f"SELECT CONCAT(first_name,' ', last_name) as full_name, {self.name}_id \
+                        FROM {self.name}"
         return super().query(query_string)
     
 
@@ -37,6 +38,11 @@ class Employee(QueryBase,QueryMixin):
     # from an sql execution
     def username(self,id):
         
+        if id is None:
+            query_string = f"SELECT first_name,last_name \
+                            FROM {self.name}\
+                            WHERE {self.name}_id = 1"
+            return super().query(query_string)
         # Query 4
         # Write an SQL query
         # that selects an employees full name
